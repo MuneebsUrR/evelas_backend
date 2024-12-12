@@ -4,6 +4,12 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const authRoutes = require('./routes/auth');
+const eventRoutes = require('./routes/eventRoutes'); 
+const venueProvider = require('./routes/venueProvider'); 
+const bookingRoutes = require('./routes/bookingRoutes');
+const organizerRoutes = require('./routes/organizerRoutes');
+
+
 
 dotenv.config();
 
@@ -22,7 +28,10 @@ mongoose.connect(process.env.DB_CONNECTION).then(() => { console.log("Connection
 
 // Routes
 app.use('/api/auth', authRoutes);
-
+app.use('/api/events', eventRoutes);
+app.use('/api', venueProvider);
+app.use('/api/bookings', bookingRoutes);
+app.use('/organizer',organizerRoutes);
 
 
 app.listen(port, () => {

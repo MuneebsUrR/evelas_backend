@@ -10,6 +10,8 @@ const userSchema = new mongoose.Schema({
     enum: ['admin', 'customer', 'event organizer', 'venue provider'],
     required: true,
   },
+
+  isActive: { type: Boolean, default: false },
 });
 
 // Hash password before saving
