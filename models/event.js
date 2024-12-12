@@ -1,82 +1,97 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-// Define the schema
-const EventSchema = new mongoose.Schema({
+const eventSchema = new Schema({
   title: {
     type: String,
     required: true,
   },
-  type: {
+  eventType: {
     type: String,
     required: true,
   },
   isOnline: {
     type: Boolean,
-    required: true,
+    required: true
   },
-  zipCode: {
-    type: String,
-    required: true,
+  isActive: { //only active events will be displayed in the web app venue provider can activate/deactivate the event
+    type: Boolean,
+    default: false
   },
   location: {
-    type: String,
-    required: true,
-  },
-  country: {
-    type: String,
-    required: true,
+    zipCode: {
+      type: String,
+      required: true
+    },
+    address: {
+      type: String,
+      required: true
+    },
+    country: {
+      type: String,
+      required: true
+    }
   },
   banner: {
-    type: String, // Assuming you'll store the file path or URL
-    required: true,
+    type: String,  // URL to stored image
+    required: false
   },
   description: {
     type: String,
-    required: true,
+    required: true
   },
-  registrationEmailOrURL: {
+  registration: {
+    email: {
+      type: String,
+      required: true
+    },
+    deadline: {
+      type: Date,
+      required: false
+    }
+  },
+  videoUrl: {
+    type: String,
+    required: false
+  },
+  dates: {
+    startDate: {
+      type: Date,
+      required: true
+    },
+    endDate: {
+      type: Date,
+      required: true
+    }
+  },
+  ticketing: {
     type: String,
     required: true,
   },
-  videoURL: {
-    type: String,
-    required: false, // Optional
+  organizerId: {
+    type: Schema.Types.ObjectId,
+    default:null
   },
-  startDate: {
+  venueId: {
+    type: Schema.Types.ObjectId,
+    default:null
+  },
+  createdAt: {
     type: Date,
-    required: true,
+    default: Date.now
   },
-  startTime: {
-    type: String,
-    required: true,
-  },
-  endDate: {
+  updatedAt: {
     type: Date,
-    required: true,
-  },
-  endTime: {
-    type: String,
-    required: true,
-  },
-  ticketType: {
-    type: String,
-    required: true,
-  },
-  registrationDeadline: {
-    type: Date,
-    required: false, // Optional
-  },
-  organizer: {
-    type: String,
-    required: false, // Optional
-  },
-  venue: {
-    type: String,
-    required: false, // Optional
-  },
-}, { timestamps: true });
+    default: Date.now
+  }
+});
 
-// Create the model
-const Event = mongoose.model('Event', EventSchema);
+// Update the updatedAt timestamp before saving
+eventSchema.pre('save', function(next) {
+  this.updatedAt = Date.now();
+  next();
+});
+
+const Event = mongoose.model('Event', eventSchema);
 
 module.exports = Event;
