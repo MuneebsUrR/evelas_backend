@@ -10,7 +10,7 @@ router.post('/register', async (req, res) => {
 
     try {
         // Check if the role is valid
-        if (!['admin', 'customer', 'event organizer', 'venue provider'].includes(role)) {
+        if (!['admin', 'user', 'event organizer', 'venue provider'].includes(role)) {
             return res.status(400).json({ message: 'Invalid role' });
         }
 
