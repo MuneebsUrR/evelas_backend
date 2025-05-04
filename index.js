@@ -20,7 +20,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 
-let port = 5000;
+let port = 3000;
 //connect to mongodb atlas database
 mongoose.connect(process.env.DB_CONNECTION).then(() => { console.log("Connection established") }).catch((err) => { console.log(err) });
 
