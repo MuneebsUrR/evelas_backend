@@ -1,13 +1,11 @@
 const express = require('express');
-const Event = require('../models/event');
+const EventDynamo = require('../models/eventDynamo');
 const router = express.Router();
 
 // Create a new event
 router.post('/create', async (req, res) => {
- 
   try {
-    const newEvent = new Event(req.body);
-    await newEvent.save();
+    const newEvent = await EventDynamo.create(req.body);
 
     res.status(201).json({
       success: true,
@@ -28,8 +26,7 @@ router.post('/create', async (req, res) => {
 // Get all events
 router.get('/', async (req, res) => {
   try {
-    const events = await Event.find()
-      .sort({ createdAt: -1 });
+    const events = await EventDynamo.getAll();
 
     res.status(200).json({
       success: true,
@@ -57,8 +54,7 @@ router.get('/by-email', async (req, res) => {
   }
 
   try {
-    // Query based on the nested registration.email field
-    const events = await Event.find({ 'registration.email': email }).sort({ createdAt: -1 });
+    const events = await EventDynamo.getByEmail(email);
 
     res.status(200).json({
       success: true,
@@ -75,19 +71,11 @@ router.get('/by-email', async (req, res) => {
   }
 });
 
-
 // Delete an event by ID
 router.delete('/delete/:id', async (req, res) => {
   try {
     const eventId = req.params.id;
-    const deletedEvent = await Event.findByIdAndDelete(eventId);
-
-    if (!deletedEvent) {
-      return res.status(404).json({
-        success: false,
-        error: 'Event not found'
-      });
-    }
+    const deletedEvent = await EventDynamo.delete(eventId);
 
     res.status(200).json({
       success: true,

@@ -33,6 +33,11 @@ app.use('/api', venueProvider);
 app.use('/api/bookings', bookingRoutes);
 app.use('/organizer',organizerRoutes);
 
+app.get('/', (req, res) => {
+    res.send('Hello World!');
+});
+
+
 
 app.listen(port, () => {
     console.log(`App listening on port ${port}`)
